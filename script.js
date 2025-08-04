@@ -52,7 +52,8 @@ function calculateFinalValue() {
 
 function calcularPrecoSugerido(tempoGasto, materiaPrimaGasta) {
     // Definindo as constantes
-    var lastModifier = localStorage.getItem("lastModifier")
+    const lastModifier = localStorage.getItem("lastModifier")
+    const lastMinimumProfit = localStorage.getItem("lastMinimumProfit")
     const lastModifierUsed = lastModifier==null?1:lastModifier/10
     const a = lastModifierUsed;
     const b = 0.01;
@@ -64,7 +65,7 @@ function calcularPrecoSugerido(tempoGasto, materiaPrimaGasta) {
     const modificador = 1 / (a + b * (tempoGasto + materiaPrimaGasta));
     
     // Garantindo que o modificador seja no mínimo 5
-    const modificadorFinal = Math.max(5, modificador);
+    const modificadorFinal = Math.max(lastMinimumProfit, modificador);
     
     // Calculando o preço sugerido
     const precoSugerido = custoTotal * modificadorFinal;
@@ -143,14 +144,21 @@ function openSettingsModal(option) {
     if (option === 'configuracoes') {
         title.textContent = 'Configurações';
         content.innerHTML = `
-        <p>Esse modificador serve para calcular a sugestao do preco, quanto menor o valor maior a margem sugerida. Obs: o valor minimo sugerido e limitado a 5x o valor do custo.</p>
-        
-        <div style="display: flex; align-items: center;">0<input type="range" id="modifier" name="volume" min="1" max="10" step="0.1" onchange="changeModifier()"/>10</div>
+        <p>Esse modificador serve para calcular a sugestao do preco, quanto menor o valor maior a margem sugerida.</p>
+        <h4>Modificador de lucro</h4>
+        <div style="display: flex; align-items: center;">0<input type="range" id="modifier" name="volume" min="1" max="10" step="0.1" onchange="changeModifier()"/>10</div><br>
+        <h4>Lucro minimo</h4>
+        <div style="display: flex; align-items: center;">2<input type="range" id="minimumProfit" name="volume" min="2" max="10" step="1" onchange="changeMinimumProfit()"/>10</div>
         `;
         var modifier = document.getElementById("modifier")
         var lastModifier = localStorage.getItem("lastModifier")
         const lastModifierUsed = lastModifier==null?1:lastModifier
         modifier.value = lastModifierUsed
+
+        var minimumProfit = document.getElementById("minimumProfit")
+        var lastMinimumProfit = localStorage.getItem("lastMinimumProfit")
+        const lastMinimumProfitUsed = lastMinimumProfit==null?2:lastMinimumProfit
+        minimumProfit.value = lastMinimumProfitUsed
     } else if (option === 'idioma') {
         title.textContent = 'Idioma';
         content.innerHTML=`
@@ -171,6 +179,12 @@ function changeProduct(){
 function changeModifier(){
     var modifier = document.getElementById("modifier")
     localStorage.setItem("lastModifier",modifier.value)
+
+}
+
+function changeMinimumProfit(){
+    var minimumProfit = document.getElementById("minimumProfit")
+    localStorage.setItem("lastMinimumProfit",minimumProfit.value)
 
 }
 
