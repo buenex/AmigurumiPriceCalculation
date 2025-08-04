@@ -1,0 +1,136 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+.container {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    max-width: 500px;
+    width: 100%;
+}
+.form-group {
+    margin-bottom: 15px;
+}
+label {
+    display: block;
+    margin-bottom: 5px;
+}
+input, select, button {
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+button {
+    background-color: #28a745;
+    color: #fff;
+    cursor: pointer;
+    border: none;
+}
+button:hover {
+    background-color: #218838;
+}
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.4);
+}
+.modal-content {
+    background-color: #fff;
+    margin: 15% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+    max-width: 500px;
+    border-radius: 8px;
+}
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.info-icon {
+    display: inline-block;
+    margin-left: 10px;
+    cursor: pointer;
+    position: relative;
+}
+
+.info-icon::before {
+    content: 'ℹ️'; /* Unicode para ícone de informação */
+    font-size: 1.2em;
+}
+
+.tooltip {
+    display: none;
+    position: absolute;
+    top: 20px;
+    left: 0;
+    background-color: #333;
+    color: #fff;
+    padding: 5px;
+    border-radius: 5px;
+    width: 600px;
+    z-index: 10;
+}
+
+.info-icon:hover .tooltip {
+    display: block;
+}
+
+.settings-menu {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+}
+
+.settings-menu i {
+    font-size: 24px;
+    cursor: pointer;
+}
+
+.settings-options {
+    display: none;
+    position: absolute;
+    right: 0;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.settings-options a {
+    display: block;
+    padding: 10px;
+    text-decoration: none;
+    color: #333;
+    border-bottom: 1px solid #ccc;
+}
+
+.settings-options a:hover {
+    background-color: #f4f4f4;
+}

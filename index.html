@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Cadastro de Produtos</title>
+    <link rel="stylesheet" type="text/css" href="./style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <div class="settings-menu">
+            <i class="fas fa-cog" onclick="toggleSettingsMenu()"></i>
+            <div class="settings-options" id="settingsOptions">
+                <a href="#" onclick="openSettingsModal('configuracoes')">Configurações</a>
+                <a href="#" onclick="openSettingsModal('idioma')">Idioma</a>
+            </div>
+        </div>
+        <!-- Restante do código -->
+        <div id="settingsModal" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="closeSettingsModal()">&times;</span>
+                <h2 id="settingsTitle"></h2>
+                <p id="settingsContent"></p>
+            </div>
+        </div>
+        <h1>Sistema de Cadastro de Produtos</h1>
+        <button onclick="openModal(0)">Cadastrar Novo Produto</button>
+
+        <h2>Calcular Valor Final</h2>
+        <div class="form-group">
+            <label for="selectProduct" style="margin-right: 10px;">Selecione o Produto:</label>
+            <div  style="display: flex; align-items: center;">
+                <select id="selectProduct" onchange="changeProduct()"></select>
+                <i class="fas fa-edit" style="margin-left: 10px; cursor: pointer;" onclick="editProduct()"></i>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="inputWeight">Peso (gramas):</label>
+            <input type="number" id="inputWeight" step="0.01">
+        </div>
+        <div class="form-group">
+            <label for="inputWeight">Horas trabalhadas(min):</label>
+            <input type="number" id="inputWorkedTime" step="1">
+        </div>
+        <button onclick="calculateFinalValue()">Calcular</button>
+        <h3>Valor Final sugerido: <span id="finalValue">R$ 0.00</span>
+            <span class="info-icon">
+                <div class="tooltip" id="tooltip">
+                    Aqui você pode inserir informações adicionais sobre o valor final sugerido.
+                </div>
+            </span>
+        </h3>
+    </div>
+
+    <div id="productModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h2>Cadastrar Produto</h2>
+            <div class="form-group">
+                <label for="productId">ID do Produto:</label>
+                <input type="text" id="productId" disabled>
+            </div>
+            <div class="form-group">
+                <label for="productName">Nome do Produto:</label>
+                <input type="text" id="productName">
+            </div>
+            <div class="form-group">
+                <label for="productValue">Valor total do Produto:</label>
+                <input type="number" id="productValue" step="0.01">
+            </div>
+            <div class="form-group">
+                <label for="productWeight">Peso do Produto (gramas):</label>
+                <input type="number" id="productWeight" step="1">
+            </div>
+            <button onclick="addProduct()">Cadastrar Produto</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
