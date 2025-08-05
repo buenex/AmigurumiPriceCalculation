@@ -1,6 +1,7 @@
 let products = getStorage("products");
 updateProductList()
 
+
 function addProduct() {
     const id = document.getElementById('productId').value;
     const name = document.getElementById('productName').value;
@@ -290,7 +291,9 @@ function saveLanguage() {
 }
 function changeLanguage(){
     const elements = document.querySelectorAll('[data-i18n]');
-    selectedLanguage = localStorage.getItem("lang")
+    const lang = localStorage.getItem("lang")
+
+    selectedLanguage = lang==null?"pt":lang
 
     elements.forEach(element => {
         const key = element.getAttribute('data-i18n');
