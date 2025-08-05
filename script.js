@@ -41,12 +41,15 @@ function calculateFinalValue() {
         const finalValue = calcularPrecoSugerido(totalCostTime,productUsed);
         
         document.getElementById('finalValue').textContent = `R$ ${finalValue.toFixed(2)}`;
-        txtTooltip.innerHTML=`O valor final foi formado da seguinte forma: <br><br>
+        txtTooltip.innerHTML=localStorage.getItem("lang")=="pt"?`O valor final foi formado da seguinte forma: <br><br>
                                 Produto gasto: R$ ${parseFloat(productUsed).toFixed(2)} <br>
                                 Custo do tempo: ${parseFloat(totalCostTime).toFixed(2)} hora(s)
-                             `
+                             `:`The final value is made as follow: <br><br>
+                                Product used: R$ ${parseFloat(productUsed).toFixed(2)} <br>
+                                Time coast: ${parseFloat(totalCostTime).toFixed(2)} hour(s)
+                             `;
     } else {
-        alert('Por favor, selecione um produto e insira um peso válido.');
+        alert(localStorage.getItem("lang")=="en"?'Please, select a product and insert a valid weight!':'Por favor, selecione um produto e insira um peso válido!');
     }
 }
 
@@ -142,14 +145,15 @@ function openSettingsModal(option) {
     const content = document.getElementById('settingsContent');
     content.innerHTML=""
     if (option === 'configuracoes') {
-        title.textContent = 'Configurações';
+        title.textContent = localStorage.getItem("lang")=="en"?"Settings":'Configurações';
         content.innerHTML = `
-        <p>Esse modificador serve para calcular a sugestao do preco, quanto menor o valor maior a margem sugerida.</p>
-        <h4>Modificador de lucro</h4>
+        <p data-i18n="modifierConfigInfo">Esse modificador serve para calcular a sugestao do preco, quanto menor o valor maior a margem sugerida.</p>
+        <h4 data-i18n="modifierConfigTitle">Modificador de lucro</h4>
         <div style="display: flex; align-items: center;">0<input type="range" id="modifier" name="volume" min="1" max="10" step="0.1" onchange="changeModifier()"/>10</div><br>
-        <h4>Lucro minimo</h4>
+        <h4 data-i18n="profitConfigTitle">Lucro minimo</h4>
         <div style="display: flex; align-items: center;">2<input type="range" id="minimumProfit" name="volume" min="2" max="10" step="1" onchange="changeMinimumProfit()"/>10</div>
         `;
+        changeLanguage()
         var modifier = document.getElementById("modifier")
         var lastModifier = localStorage.getItem("lastModifier")
         const lastModifierUsed = lastModifier==null?1:lastModifier
@@ -160,11 +164,20 @@ function openSettingsModal(option) {
         const lastMinimumProfitUsed = lastMinimumProfit==null?2:lastMinimumProfit
         minimumProfit.value = lastMinimumProfitUsed
     } else if (option === 'idioma') {
-        title.textContent = 'Idioma';
+        langLastUsed = localStorage.getItem("lang")
+        title.textContent = langLastUsed=="en"?"Language":"Idioma";
         content.innerHTML=`
-        <p>Coming soon.</p>
-        
+        <div class="language-selector">
+            <label for="languageSelect" data-i18n="titleLanguage">Selecione o idioma:</label>
+            <select id="languageSelect" onchange="saveLanguage()">
+                <option value="pt">Português (Brasil)</option>
+                <option value="en">English</option>
+            </select>
+        </div>
         `;
+        const selectLanguage = document.getElementById("languageSelect")
+        selectLanguage.value = langLastUsed
+        changeLanguage()
     }
     
     modal.style.display = 'block';
@@ -208,6 +221,81 @@ function onLoad(){
     if (lastProductUsed!=0){
         select.value = lastProductUsed
     }
+    changeLanguage()
+}
+
+const texts={
+    "pt":{
+        modifierConfigInfo:"Esse modificador serve para calcular a sugestao do preco, quanto menor o valor maior a margem sugerida.",
+        modifierConfigTitle:"Modificador de lucro",
+        profitConfigTitle:"Lucro minimo",
+        titleLanguage:"Idioma",
+        pageTitle:"Sistema de Cadastro de Produtos",
+        configOpt1:"Configurações",
+        configOpt2:"Idioma",
+        titleDiv:"Sistema de Cadastro de Produtos",
+        btnNewProduct:"Cadastrar Novo Produto",
+        calculateFinalValue:"Calcular Valor Final",
+        selectProductLabel:"Selecione o Produto:",
+        weight:"Peso (gramas):",
+        hoursWorked:"Horas trabalhadas(min):",
+        calculate:"Calcular",
+        suggestedFinalValue:`Valor Final sugerido: <span id="finalValue">R$ 0.00</span>
+                                <span class="info-icon">
+                                    <div class="tooltip" id="tooltip">
+                                        Aqui você pode inserir informações adicionais sobre o valor final sugerido.
+                                    </div>
+                                </span>`,
+        insertNewProduct:"Cadastrar Produto",
+        productId:"ID do Produto:",
+        productName:"Nome do Produto:",
+        productValue:"Valor total do Produto:",
+        productWeight:"Peso do Produto (gramas):",
+        btnInsertProduct:"Cadastrar Produto",
+    },
+    "en":{
+        modifierConfigInfo:"This modifier is to calculate the price suggestion,lower means that suggested price is higher.",
+        modifierConfigTitle:"Profit modifier",
+        profitConfigTitle:"Minimal profit",
+        titleLanguage:"Language",
+        pageTitle:"Amigurumi price calculator",
+        configOpt1:"Settings",
+        configOpt2:"Language",
+        titleDiv:"System to calculate amigurumi price",
+        btnNewProduct:"Insert new product",
+        calculateFinalValue:"Calculate final value",
+        selectProductLabel:"Select product:",
+        weight:"Weight (grams):",
+        hoursWorked:"Worked hours (min):",
+        calculate:"Calculate",
+        suggestedFinalValue:`Suggested final value: <span id="finalValue">R$ 0.00</span>
+                            <span class="info-icon">
+                                <div class="tooltip" id="tooltip">
+                                    Here you can insert additional informations about suggested final value.
+                                </div>
+                            </span>`,
+        insertNewProduct:"Insert new product",
+        productId:"Product ID:",
+        productName:"Product name:",
+        productValue:"Product total value:",
+        productWeight:"Product weight (grams):",
+        btnInsertProduct:"Insert product",
+    }
+}
+
+function saveLanguage() {
+    const selectedLanguage = document.getElementById('languageSelect').value;
+    localStorage.setItem("lang",selectedLanguage)
+    changeLanguage()
+}
+function changeLanguage(){
+    const elements = document.querySelectorAll('[data-i18n]');
+    selectedLanguage = localStorage.getItem("lang")
+
+    elements.forEach(element => {
+        const key = element.getAttribute('data-i18n');
+        element.innerHTML = texts[selectedLanguage][key];
+    });
 }
 
 onLoad()
